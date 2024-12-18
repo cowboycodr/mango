@@ -1,3 +1,5 @@
+use crate::mango::literal::Literal;
+
 use super::expression::Expression;
 
 use super::token::Token;
@@ -103,6 +105,12 @@ impl Parser {
     }
 
     fn primary(&mut self) -> Expression {
+        if self.expect(&[TokenType::True]) {
+            return Expression::Literal(Literal::Boolean(true));
+        }
+        if self.expect(&[TokenType::False]) {
+            return Expression::Literal(Literal::Boolean(false));
+        }
         if self.expect(&[TokenType::Number]) {
             return Expression::Literal(self.previous().literal);
         }
@@ -121,7 +129,7 @@ impl Parser {
     }
 
     fn previous(&self) -> Token {
-        self.tokens[self.position - 1]
+        self.tokens[self.position - 1].clone()
     }
 
     fn expect(&mut self, types: &[TokenType]) -> bool {
@@ -141,9 +149,9 @@ impl Parser {
 
     fn peek(&self, offset: usize) -> Token {
         if self.position + offset > self.tokens.len() {
-            return *self.tokens.last().unwrap();
+            return self.tokens.last().unwrap().clone();
         }
-        self.tokens[self.position + offset]
+        self.tokens[self.position + offset].clone()
     }
 
     fn advance(&mut self) -> Token {
@@ -151,7 +159,7 @@ impl Parser {
             return self.peek(0);
         }
 
-        let token = self.tokens[self.position];
+        let token = self.tokens[self.position].clone();
         self.position += 1;
 
         return token;

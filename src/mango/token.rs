@@ -1,7 +1,7 @@
 use super::literal::Literal;
 use super::token_type::TokenType;
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub struct Token {
     pub kind: TokenType,
     pub literal: Literal,

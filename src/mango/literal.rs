@@ -1,10 +1,11 @@
 use std::fmt::{self, Display, Formatter};
 use std::ops::{Add, Div, Mul, Neg, Not, Sub};
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub enum Literal {
     Number(f64),
     Boolean(bool),
+    String(String),
 
     None,
 }
@@ -14,6 +15,7 @@ impl Display for Literal {
         match self {
             Literal::Number(n) => write!(f, "{}", n),
             Literal::Boolean(b) => write!(f, "{}", b),
+            Literal::String(s) => write!(f, "{}", s),
             Literal::None => write!(f, "None"),
         }
     }

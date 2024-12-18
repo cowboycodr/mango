@@ -52,7 +52,7 @@ impl Expression {
                 }
                 kind => panic!("Unexpected unary operator {:?}", kind),
             },
-            Expression::Literal(literal) => *literal,
+            Expression::Literal(literal) => literal.clone(),
             Expression::Grouping { expression } => expression.evaluate(),
         }
     }

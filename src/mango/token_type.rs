@@ -8,11 +8,25 @@ pub enum TokenType {
     Slash,
 
     Bang,
-
+    BangEqual,
     Star,
     StarStar,
 
+    True,
+    False,
+
     Number,
+    Identifier,
 
     End,
+}
+
+impl From<String> for TokenType {
+    fn from(value: String) -> Self {
+        match value.as_str() {
+            "true" => TokenType::True,
+            "false" => TokenType::False,
+            _ => TokenType::Identifier,
+        }
+    }
 }

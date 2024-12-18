@@ -74,6 +74,8 @@ impl Scanner {
         let char = self.source.next();
 
         match char {
+            ' ' | '\t' | '\r' | '\n' => None, // Skip irrelevant, but valid characters, first.
+
             '(' => Some(Token::new(TokenType::LeftParen, None)),
             ')' => Some(Token::new(TokenType::RightParen, None)),
 
@@ -112,10 +114,23 @@ impl Scanner {
 
                 Some(Token::new(TokenType::Number, Some(Literal::Number(value))))
             }
+            c if c.is_alphabetic() => {
+                while self.source.peek(0).is_alphanumeric() {
+                    self.source.next();
+                }
 
-            ' ' | '\t' | '\r' | '\n' => None,
+                let value: String = self
+                    .source
+                    .slice(self.start, Some(self.source.position))
+                    .to_string();
+                let kind = TokenType::from(value.clone());
 
-            _ => None,
+                Some(Token::new(
+                    TokenType::from(kind),
+                    Some(Literal::String(value)),
+                ))
+            }
+            _ => panic!("Unknown character!"),
         }
     }
 }
