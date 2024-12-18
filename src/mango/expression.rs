@@ -1,7 +1,7 @@
 use super::token::Token;
 use super::token_type::TokenType;
 
-use super::literal::Literal;
+use super::literal::{Literal, Pow};
 
 #[derive(Debug)]
 pub enum Expression {
@@ -32,6 +32,8 @@ impl Expression {
                 TokenType::Minus => left.evaluate() - right.evaluate(),
                 TokenType::Star => left.evaluate() * right.evaluate(),
                 TokenType::Slash => left.evaluate() / right.evaluate(),
+
+                TokenType::StarStar => left.evaluate().pow(right.evaluate()),
                 kind => panic!("Unexpected binary operator: {:?}", kind),
             },
             Expression::Unary { operator, right } => match operator.kind {

@@ -18,9 +18,9 @@ impl Display for Literal {
 }
 
 impl Add for Literal {
-    type Output = Literal;
+    type Output = Self;
 
-    fn add(self, other: Literal) -> Literal {
+    fn add(self, other: Literal) -> Self {
         match (self, other) {
             (Literal::Number(a), Literal::Number(b)) => Literal::Number(a + b),
             _ => Literal::None,
@@ -29,9 +29,9 @@ impl Add for Literal {
 }
 
 impl Sub for Literal {
-    type Output = Literal;
+    type Output = Self;
 
-    fn sub(self, other: Literal) -> Literal {
+    fn sub(self, other: Literal) -> Self {
         match (self, other) {
             (Literal::Number(a), Literal::Number(b)) => Literal::Number(a - b),
             _ => Literal::None,
@@ -40,9 +40,9 @@ impl Sub for Literal {
 }
 
 impl Mul for Literal {
-    type Output = Literal;
+    type Output = Self;
 
-    fn mul(self, other: Literal) -> Literal {
+    fn mul(self, other: Literal) -> Self {
         match (self, other) {
             (Literal::Number(a), Literal::Number(b)) => Literal::Number(a * b),
             _ => Literal::None,
@@ -51,9 +51,9 @@ impl Mul for Literal {
 }
 
 impl Div for Literal {
-    type Output = Literal;
+    type Output = Self;
 
-    fn div(self, other: Literal) -> Literal {
+    fn div(self, other: Literal) -> Self {
         match (self, other) {
             (Literal::Number(a), Literal::Number(b)) if b != 0.0 => Literal::Number(a / b),
             _ => Literal::None,
@@ -62,12 +62,28 @@ impl Div for Literal {
 }
 
 impl Neg for Literal {
-    type Output = Literal;
+    type Output = Self;
 
-    fn neg(self) -> Literal {
+    fn neg(self) -> Self {
         match self {
             Literal::Number(a) => Literal::Number(-a),
             _ => Literal::None,
+        }
+    }
+}
+
+pub trait Pow {
+    type Output;
+    fn pow(self, exponent: Literal) -> Self::Output;
+}
+
+impl Pow for Literal {
+    type Output = Self;
+
+    fn pow(self, exponent: Literal) -> Self {
+        match (self, exponent) {
+            (Literal::Number(a), Literal::Number(b)) => Literal::Number(a.powf(b)),
+            _ => Literal::Number(0.0),
         }
     }
 }

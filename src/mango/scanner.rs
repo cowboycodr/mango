@@ -79,8 +79,16 @@ impl Scanner {
 
             '+' => Some(Token::new(TokenType::Plus, None)),
             '-' => Some(Token::new(TokenType::Minus, None)),
-            '*' => Some(Token::new(TokenType::Star, None)),
             '/' => Some(Token::new(TokenType::Slash, None)),
+
+            '*' => {
+                if self.source.peek(0) == '*' {
+                    self.source.next();
+                    Some(Token::new(TokenType::StarStar, None))
+                } else {
+                    Some(Token::new(TokenType::Star, None))
+                }
+            }
 
             c if c.is_ascii_digit() => {
                 while self.source.peek(0).is_ascii_digit() && !self.source.is_at_end() {

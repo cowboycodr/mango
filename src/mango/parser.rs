@@ -42,7 +42,7 @@ impl Parser {
     }
 
     fn factor(&mut self) -> Expression {
-        let mut expression = self.unary();
+        let mut expression = self.exponent();
 
         if self.expect(&[TokenType::Star, TokenType::Slash]) {
             let operator = self.previous();
@@ -53,6 +53,23 @@ impl Parser {
                 operator,
                 right: Box::new(right),
             }
+        }
+
+        expression
+    }
+
+    fn exponent(&mut self) -> Expression {
+        let mut expression = self.unary();
+
+        if self.expect(&[TokenType::StarStar]) {
+            let operator = self.previous();
+            let right = self.exponent();
+
+            expression = Expression::Binary {
+                left: Box::new(expression),
+                operator: operator,
+                right: Box::new(right),
+            };
         }
 
         expression
