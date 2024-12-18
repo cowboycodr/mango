@@ -4,6 +4,7 @@ use std::ops::{Add, Div, Mul, Neg, Not, Sub};
 #[derive(Clone, Copy, Debug)]
 pub enum Literal {
     Number(f64),
+    Boolean(bool),
 
     None,
 }
@@ -12,6 +13,7 @@ impl Display for Literal {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
             Literal::Number(n) => write!(f, "{}", n),
+            Literal::Boolean(b) => write!(f, "{}", b),
             Literal::None => write!(f, "None"),
         }
     }
@@ -77,7 +79,8 @@ impl Not for Literal {
 
     fn not(self) -> Self::Output {
         match self {
-            _ => Literal::None,
+            Literal::Boolean(a) => Literal::Boolean(!a),
+            _ => Literal::Boolean(false),
         }
     }
 }

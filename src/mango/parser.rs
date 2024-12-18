@@ -76,7 +76,7 @@ impl Parser {
     }
 
     fn unary(&mut self) -> Expression {
-        if self.expect(&[TokenType::Minus]) {
+        if self.expect(&[TokenType::Bang, TokenType::Minus]) {
             let operator = self.previous();
             let right = self.unary();
 
