@@ -7,6 +7,8 @@ pub enum TokenType {
     Minus,
     Slash,
 
+    Bang,
+
     Star,
     StarStar,
 

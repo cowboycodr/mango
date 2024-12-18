@@ -83,10 +83,23 @@ impl Parser {
             return Expression::Unary {
                 operator,
                 right: Box::new(right),
+                is_prefix: true,
             };
         }
 
-        self.primary()
+        let mut expression = self.primary();
+
+        if self.expect(&[TokenType::Bang]) {
+            let operator = self.previous();
+
+            expression = Expression::Unary {
+                operator: operator,
+                right: Box::new(expression),
+                is_prefix: false,
+            };
+        }
+
+        expression
     }
 
     fn primary(&mut self) -> Expression {

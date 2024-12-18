@@ -1,5 +1,5 @@
 use std::fmt::{self, Display, Formatter};
-use std::ops::{Add, Div, Mul, Neg, Sub};
+use std::ops::{Add, Div, Mul, Neg, Not, Sub};
 
 #[derive(Clone, Copy, Debug)]
 pub enum Literal {
@@ -72,6 +72,16 @@ impl Neg for Literal {
     }
 }
 
+impl Not for Literal {
+    type Output = Self;
+
+    fn not(self) -> Self::Output {
+        match self {
+            _ => Literal::None,
+        }
+    }
+}
+
 pub trait Pow {
     type Output;
     fn pow(self, exponent: Literal) -> Self::Output;
@@ -83,7 +93,34 @@ impl Pow for Literal {
     fn pow(self, exponent: Literal) -> Self {
         match (self, exponent) {
             (Literal::Number(a), Literal::Number(b)) => Literal::Number(a.powf(b)),
-            _ => Literal::Number(0.0),
+            _ => Literal::None,
+        }
+    }
+}
+
+pub trait Fac {
+    type Output;
+    fn fac(self) -> Self::Output;
+}
+
+impl Fac for Literal {
+    type Output = Self;
+
+    fn fac(self) -> Self::Output {
+        match self {
+            Literal::Number(a) => {
+                let n = a as i64;
+                if n < 1 {
+                    return Literal::Number(0.0);
+                }
+
+                let mut result: i64 = 1;
+                for i in 1..=a as i64 {
+                    result *= i;
+                }
+                Literal::Number(result as f64)
+            }
+            _ => Literal::None,
         }
     }
 }
