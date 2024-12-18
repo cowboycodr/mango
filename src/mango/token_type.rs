@@ -8,7 +8,6 @@ pub enum TokenType {
     Slash,
 
     Bang,
-    BangEqual,
     Star,
     StarStar,
 
@@ -17,6 +16,7 @@ pub enum TokenType {
 
     Number,
     Identifier,
+    String,
 
     End,
 }

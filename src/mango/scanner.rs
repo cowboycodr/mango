@@ -93,6 +93,25 @@ impl Scanner {
                 }
             }
 
+            '"' => {
+                self.source.next();
+
+                while self.source.peek(0) != '"' && !self.source.is_at_end() {
+                    self.source.next();
+                }
+
+                if self.source.is_at_end() {
+                    panic!("Unterminated string..");
+                }
+
+                self.source.next();
+
+                let value = self
+                    .source
+                    .slice(self.start + 1, Some(self.source.position - 1))
+                    .to_string();
+                Some(Token::new(TokenType::String, Some(Literal::String(value))))
+            }
             c if c.is_ascii_digit() => {
                 while self.source.peek(0).is_ascii_digit() && !self.source.is_at_end() {
                     self.source.next();

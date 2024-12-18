@@ -114,6 +114,10 @@ impl Parser {
         if self.expect(&[TokenType::Number]) {
             return Expression::Literal(self.previous().literal);
         }
+        if self.expect(&[TokenType::String]) {
+            return Expression::Literal(self.previous().literal);
+        }
+
         if self.expect(&[TokenType::LeftParen]) {
             let expression = Expression::Grouping {
                 expression: Box::new(self.expression()),

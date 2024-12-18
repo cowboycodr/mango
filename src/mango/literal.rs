@@ -27,6 +27,9 @@ impl Add for Literal {
     fn add(self, other: Literal) -> Self {
         match (self, other) {
             (Literal::Number(a), Literal::Number(b)) => Literal::Number(a + b),
+            (Literal::String(a), Literal::String(b)) => Literal::String(format!("{a}{b}")),
+            (Literal::String(a), Literal::Number(b)) => Literal::String(format!("{a}{b}")),
+            (Literal::Number(a), Literal::String(b)) => Literal::String(format!("{a}{b}")),
             _ => Literal::None,
         }
     }
