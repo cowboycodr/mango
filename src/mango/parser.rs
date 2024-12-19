@@ -180,6 +180,13 @@ impl Parser {
         if self.expect(&[TokenType::String]) {
             return Expression::Literal(self.previous().literal);
         }
+        if self.expect(&[TokenType::Identifier]) {
+            if let Literal::String(name) = self.previous().literal {
+                return Expression::Variable(name)
+            } else {
+                return Expression::Literal(Literal::None);
+            }
+        }
 
         if self.expect(&[TokenType::LeftParen]) {
             let expression = Expression::Grouping {

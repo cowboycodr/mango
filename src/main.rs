@@ -5,7 +5,7 @@ use mango::parser::Parser;
 use mango::scanner::Scanner;
 
 fn main() {
-    let code = "print 1; print 2;";
+    let code = "var a = 1; var b = 2; print a + b;";
 
     let mut interpreter = Interpreter::new();
 
