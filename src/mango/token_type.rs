@@ -4,6 +4,8 @@ pub enum TokenType {
 
     LeftParen,
     RightParen,
+    LeftBrace,
+    RightBrace,
 
     Plus,
     Minus,

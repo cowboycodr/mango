@@ -80,6 +80,8 @@ impl Scanner {
 
             '(' => Some(Token::new(TokenType::LeftParen, None)),
             ')' => Some(Token::new(TokenType::RightParen, None)),
+            '{' => Some(Token::new(TokenType::LeftBrace, None)),
+            '}' => Some(Token::new(TokenType::RightBrace, None)),
 
             '+' => Some(Token::new(TokenType::Plus, None)),
             '-' => Some(Token::new(TokenType::Minus, None)),

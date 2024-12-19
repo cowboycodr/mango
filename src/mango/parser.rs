@@ -30,20 +30,34 @@ impl Parser {
     }
 
     fn statement(&mut self) -> Statement {
-        let statement = self.print();
+        self.block()
+    }
 
-        self.consume(
-            TokenType::Semicolon,
-            "';' Expected after statement".to_string(),
-        );
+    fn block(&mut self) -> Statement {
+        if self.expect(&[TokenType::LeftBrace]) {
+            let mut statements = Vec::<Statement>::new();
 
-        statement
+            while self.peek(0).kind != TokenType::RightBrace {
+                statements.push(self.statement());
+            }
+
+            self.advance();
+
+            return Statement::Block { statements };
+        }
+
+        self.print()
     }
 
     fn print(&mut self) -> Statement {
         if self.expect(&[TokenType::Print]) {
             let expression = self.expression();
             let statement = Statement::Print { expression };
+
+            self.consume(
+                TokenType::Semicolon,
+                "';' Expected after statement".to_string(),
+            );
 
             return statement;
         }
@@ -71,6 +85,11 @@ impl Parser {
 
             let value = self.expression();
 
+            self.consume(
+                TokenType::Semicolon,
+                "';' Expected after statement".to_string(),
+            );
+
             return Statement::VariableDeclaration { name, value };
         }
 
@@ -79,6 +98,11 @@ impl Parser {
 
     fn expression_statement(&mut self) -> Statement {
         let expression = self.expression();
+
+        self.consume(
+            TokenType::Semicolon,
+            "';' Expected after statement".to_string(),
+        );
 
         Statement::Expression {
             expression: expression,
