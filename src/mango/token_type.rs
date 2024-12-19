@@ -13,6 +13,8 @@ pub enum TokenType {
     Star,
     StarStar,
 
+    Print,
+
     True,
     False,
 
@@ -28,6 +30,9 @@ impl From<String> for TokenType {
         match value.as_str() {
             "true" => TokenType::True,
             "false" => TokenType::False,
+
+            "print" => TokenType::Print,
+            
             _ => TokenType::Identifier,
         }
     }

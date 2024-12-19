@@ -24,11 +24,30 @@ impl Parser {
     }
 
     fn statement(&mut self) -> Statement {
-        let expression = self.expression();
+        let statement = self.print();
+
         self.consume(
             TokenType::Semicolon,
             "';' Expected after statement".to_string(),
         );
+
+        statement
+    }
+
+    fn print(&mut self) -> Statement {
+        if self.expect(&[TokenType::Print]) {
+            let expression = self.expression();
+            let statement = Statement::Print { expression };
+
+            return statement;
+        }
+
+        self.expression_statement()
+    }
+
+    fn expression_statement(&mut self) -> Statement {
+        let expression = self.expression();
+
         Statement::Expression {
             expression: expression,
         }

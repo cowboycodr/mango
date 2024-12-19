@@ -68,4 +68,8 @@ impl statement::Visitor<()> for Interpreter {
     fn visit_expression(&mut self, expression: &Expression) {
         expression.accept(self);
     }
+
+    fn visit_print(&mut self, expression: &Expression) -> () {
+        println!("{}", expression.accept(self));
+    }
 }
