@@ -17,7 +17,11 @@ impl Environment {
         self.values.insert(name, value);
     }
 
-    pub fn access(&mut self, name: String) -> Option<&Literal> {
-        self.values.get(&name)
+    pub fn access(&mut self, name: &String) -> &Literal {
+        if let Some(value) = self.values.get(name) {
+            return &value;
+        } else {
+            return &Literal::None;
+        }
     }
 }

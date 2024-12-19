@@ -1,14 +1,19 @@
+use super::environment::Environment;
 use super::expression::{self, Expression};
 use super::statement::{self, Statement};
 
 use super::literal::{Fac, Literal, Pow};
 use super::token_type::TokenType;
 
-pub struct Interpreter;
+pub struct Interpreter {
+    environment: Environment,
+}
 
 impl Interpreter {
     pub fn new() -> Self {
-        Self {}
+        Self {
+            environment: Environment::new(),
+        }
     }
 
     pub fn interpret(&mut self, statement: Statement) {
@@ -62,14 +67,29 @@ impl expression::Visitor<Literal> for Interpreter {
     fn visit_grouping(&mut self, expression: &Expression) -> Literal {
         expression.accept(self)
     }
+
+    fn visit_variable(&mut self, name: &String) -> Literal {
+        self.environment.access(name).clone()
+    }
 }
 
 impl statement::Visitor<()> for Interpreter {
-    fn visit_expression(&mut self, expression: &Expression) {
-        expression.accept(self);
+    fn visit_program(&mut self, statements: &Vec<Statement>) -> () {
+        for statement in statements {
+            statement.accept(self);
+        }
     }
 
     fn visit_print(&mut self, expression: &Expression) -> () {
         println!("{}", expression.accept(self));
+    }
+
+    fn visit_expression(&mut self, expression: &Expression) -> () {
+        expression.accept(self);
+    }
+
+    fn visit_variable_declaration(&mut self, name: &String, value: &Expression) -> () {
+        let value = value.accept(self);
+        self.environment.define(name.clone(), value);
     }
 }

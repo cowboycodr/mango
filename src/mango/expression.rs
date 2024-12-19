@@ -14,6 +14,7 @@ pub enum Expression {
         is_prefix: bool,
     },
     Literal(Literal),
+    Variable(String),
     Grouping {
         expression: Box<Expression>,
     },
@@ -33,6 +34,7 @@ impl Expression {
                 is_prefix,
             } => visitor.visit_unary(operator, right, *is_prefix),
             Expression::Literal(literal) => visitor.visit_literal(literal),
+            Expression::Variable(name) => visitor.visit_variable(name),
             Expression::Grouping { expression } => visitor.visit_grouping(expression),
         }
     }
@@ -42,5 +44,6 @@ pub trait Visitor<T> {
     fn visit_binary(&mut self, left: &Expression, operator: &Token, right: &Expression) -> T;
     fn visit_unary(&mut self, operator: &Token, right: &Expression, is_prefix: bool) -> T;
     fn visit_literal(&mut self, literal: &Literal) -> T;
+    fn visit_variable(&mut self, name: &String) -> T;
     fn visit_grouping(&mut self, expression: &Expression) -> T;
 }

@@ -9,11 +9,13 @@ pub enum TokenType {
     Minus,
     Slash,
 
+    Equal,
     Bang,
     Star,
     StarStar,
 
     Print,
+    Var,
 
     True,
     False,
@@ -31,6 +33,7 @@ impl From<String> for TokenType {
             "true" => TokenType::True,
             "false" => TokenType::False,
 
+            "var" => TokenType::Var,
             "print" => TokenType::Print,
 
             _ => TokenType::Identifier,

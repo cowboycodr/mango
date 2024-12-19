@@ -20,7 +20,13 @@ impl Parser {
     }
 
     pub fn parse(&mut self) -> Statement {
-        self.statement()
+        let mut statements = Vec::<Statement>::new();
+
+        while !self.is_at_end() {
+            statements.push(self.statement());
+        }
+
+        Statement::Program { statements }
     }
 
     fn statement(&mut self) -> Statement {
@@ -40,6 +46,32 @@ impl Parser {
             let statement = Statement::Print { expression };
 
             return statement;
+        }
+
+        self.variable_declaration()
+    }
+
+    fn variable_declaration(&mut self) -> Statement {
+        if self.expect(&[TokenType::Var]) {
+            let identifier = self.consume(
+                TokenType::Identifier,
+                "'Identifier' Expected after 'var'".to_string(),
+            );
+            let name: String;
+
+            if let Literal::String(var_name) = identifier.literal {
+                name = var_name;
+            } else {
+                panic!("Variable name must be alphanumerical");
+            }
+            self.consume(
+                TokenType::Equal,
+                "'=' Expected after variable declaration name".to_string(),
+            );
+
+            let value = self.expression();
+
+            return Statement::VariableDeclaration { name, value };
         }
 
         self.expression_statement()

@@ -85,6 +85,7 @@ impl Scanner {
             '-' => Some(Token::new(TokenType::Minus, None)),
             '/' => Some(Token::new(TokenType::Slash, None)),
 
+            '=' => Some(Token::new(TokenType::Equal, None)),
             '!' => Some(Token::new(TokenType::Bang, None)),
             '*' => {
                 if self.source.peek(0) == '*' {
@@ -151,7 +152,7 @@ impl Scanner {
                     Some(Literal::String(value)),
                 ))
             }
-            _ => panic!("Unknown character!"),
+            c => panic!("'{c}' Unknown character!"),
         }
     }
 }
