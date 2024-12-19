@@ -182,7 +182,7 @@ impl Parser {
         }
         if self.expect(&[TokenType::Identifier]) {
             if let Literal::String(name) = self.previous().literal {
-                return Expression::Variable(name)
+                return Expression::Variable(name);
             } else {
                 return Expression::Literal(Literal::None);
             }
