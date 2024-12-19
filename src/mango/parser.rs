@@ -1,6 +1,7 @@
 use crate::mango::literal::Literal;
 
 use super::expression::Expression;
+use super::statement::Statement;
 
 use super::token::Token;
 use super::token_type::TokenType;
@@ -18,8 +19,19 @@ impl Parser {
         }
     }
 
-    pub fn parse(&mut self) -> Expression {
-        self.expression()
+    pub fn parse(&mut self) -> Statement {
+        self.statement()
+    }
+
+    fn statement(&mut self) -> Statement {
+        let expression = self.expression();
+        self.consume(
+            TokenType::Semicolon,
+            "';' Expected after statement".to_string(),
+        );
+        Statement::Expression {
+            expression: expression,
+        }
     }
 
     fn expression(&mut self) -> Expression {

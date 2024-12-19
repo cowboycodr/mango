@@ -76,6 +76,8 @@ impl Scanner {
         match char {
             ' ' | '\t' | '\r' | '\n' => None, // Skip irrelevant, but valid characters, first.
 
+            ';' => Some(Token::new(TokenType::Semicolon, None)),
+
             '(' => Some(Token::new(TokenType::LeftParen, None)),
             ')' => Some(Token::new(TokenType::RightParen, None)),
 

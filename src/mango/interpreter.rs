@@ -1,4 +1,6 @@
-use super::expression::{Expression, Visitor};
+use super::expression::{self, Expression};
+use super::statement::{self, Statement};
+
 use super::literal::{Fac, Literal, Pow};
 use super::token_type::TokenType;
 
@@ -9,12 +11,12 @@ impl Interpreter {
         Self {}
     }
 
-    pub fn interpret(&mut self, expression: Expression) -> Literal {
-        expression.accept(self)
+    pub fn interpret(&mut self, statement: Statement) {
+        statement.accept(self)
     }
 }
 
-impl Visitor<Literal> for Interpreter {
+impl expression::Visitor<Literal> for Interpreter {
     fn visit_binary(
         &mut self,
         left: &Expression,
@@ -39,7 +41,7 @@ impl Visitor<Literal> for Interpreter {
         &mut self,
         operator: &super::token::Token,
         right: &Expression,
-        is_prefix: &bool,
+        is_prefix: bool,
     ) -> Literal {
         let right = right.accept(self);
 
@@ -59,5 +61,11 @@ impl Visitor<Literal> for Interpreter {
 
     fn visit_grouping(&mut self, expression: &Expression) -> Literal {
         expression.accept(self)
+    }
+}
+
+impl statement::Visitor<()> for Interpreter {
+    fn visit_expression(&mut self, expression: &Expression) {
+        expression.accept(self);
     }
 }

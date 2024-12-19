@@ -31,7 +31,7 @@ impl Expression {
                 operator,
                 right,
                 is_prefix,
-            } => visitor.visit_unary(operator, right, is_prefix),
+            } => visitor.visit_unary(operator, right, *is_prefix),
             Expression::Literal(literal) => visitor.visit_literal(literal),
             Expression::Grouping { expression } => visitor.visit_grouping(expression),
         }
@@ -40,7 +40,7 @@ impl Expression {
 
 pub trait Visitor<T> {
     fn visit_binary(&mut self, left: &Expression, operator: &Token, right: &Expression) -> T;
-    fn visit_unary(&mut self, operator: &Token, right: &Expression, is_prefix: &bool) -> T;
+    fn visit_unary(&mut self, operator: &Token, right: &Expression, is_prefix: bool) -> T;
     fn visit_literal(&mut self, literal: &Literal) -> T;
     fn visit_grouping(&mut self, expression: &Expression) -> T;
 }

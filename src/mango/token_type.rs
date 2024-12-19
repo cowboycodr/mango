@@ -1,5 +1,7 @@
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum TokenType {
+    Semicolon,
+
     LeftParen,
     RightParen,
 
