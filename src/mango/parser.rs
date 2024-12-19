@@ -30,6 +30,17 @@ impl Parser {
     }
 
     fn statement(&mut self) -> Statement {
+        self.while_statement()
+    }
+
+    fn while_statement(&mut self) -> Statement {
+        if self.expect(&[TokenType::While]) {
+            let condition = self.expression();
+            let block = self.block();
+
+            return Statement::While { condition, block: Box::new(block) };
+        }
+
         self.block()
     }
 

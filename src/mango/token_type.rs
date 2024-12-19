@@ -16,8 +16,9 @@ pub enum TokenType {
     Star,
     StarStar,
 
-    Print,
     Var,
+    Print,
+    While,
 
     True,
     False,
@@ -37,6 +38,7 @@ impl From<String> for TokenType {
 
             "var" => TokenType::Var,
             "print" => TokenType::Print,
+            "while" => TokenType::While,
 
             _ => TokenType::Identifier,
         }

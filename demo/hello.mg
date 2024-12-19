@@ -1,5 +1,5 @@
-var a = 5;
+var count = 0;
 
-{
-    print a! ** 2;
+while true {
+    print count;
 }

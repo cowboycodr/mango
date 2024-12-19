@@ -1,13 +1,11 @@
 mod mango;
-mod utils;
 
 use std::io::{self, Write};
+use std::time::Instant;
 
 use mango::interpreter::Interpreter;
 use mango::parser::Parser;
 use mango::scanner::Scanner;
-
-use utils::timer::Timer;
 
 fn main() {
     let interpreter = Interpreter::new();
@@ -22,7 +20,7 @@ fn main() {
 }
 
 fn run_file(file_path: &String, mut interpreter: Interpreter) {
-    let timer = Timer::start();
+    let start = Instant::now();
 
     match std::fs::read_to_string(file_path) {
         Ok(content) => {
@@ -35,7 +33,7 @@ fn run_file(file_path: &String, mut interpreter: Interpreter) {
         }
     }
 
-    println!("Completed in {} milliseconds.", timer.end().as_millis());
+    println!("Completed in {} milliseconds.", start.elapsed().as_millis());
 }
 
 fn repl(mut interpreter: Interpreter) {
@@ -55,13 +53,13 @@ fn repl(mut interpreter: Interpreter) {
             break;
         }
 
-        let timer = Timer::start();
+        let start = Instant::now();
 
         let tokens = Scanner::new(input.to_string()).scan();
         let program = Parser::new(tokens).parse();
 
         interpreter.interpret(program);
 
-        println!("Completed in {} milliseconds.", timer.end().as_millis());
+        println!("Completed in {} milliseconds.", start.elapsed().as_millis());
     }
 }

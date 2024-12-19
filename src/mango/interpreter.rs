@@ -107,6 +107,16 @@ impl statement::Visitor<()> for Interpreter {
         self.environment.define(name.clone(), value);
     }
 
+    fn visit_while(&mut self, condition: &Expression, block: &Box<Statement>) -> () {
+        loop {
+            if let Literal::Boolean(value) = condition.accept(self) {
+                if !value { break }
+            }
+
+            block.accept(self);
+        }
+    }
+
     fn visit_print(&mut self, expression: &Expression) -> () {
         println!("{}", expression.accept(self));
     }
