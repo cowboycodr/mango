@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 use super::literal::Literal;
 
+#[derive(Clone)]
 pub struct Environment {
     values: HashMap<String, Literal>,
     enclosing: Option<Box<Environment>>,
@@ -15,7 +16,7 @@ impl Environment {
         }
     }
 
-    pub fn from_environment(enclosing: Environment) -> Self {
+    pub fn from_enclosing(enclosing: Environment) -> Self {
         Self {
             values: HashMap::new(),
             enclosing: Some(Box::new(enclosing)),

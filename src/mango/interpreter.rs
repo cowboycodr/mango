@@ -84,8 +84,18 @@ impl statement::Visitor<()> for Interpreter {
         }
     }
 
-    fn visit_print(&mut self, expression: &Expression) -> () {
-        println!("{}", expression.accept(self));
+    fn visit_block(&mut self, statements: &Vec<Statement>) -> () {
+        let cloned_environment = self.environment.clone();
+        let previous_environment = std::mem::replace(
+            &mut self.environment,
+            Environment::from_enclosing(cloned_environment),
+        );
+
+        for statement in statements {
+            statement.accept(self);
+        }
+
+        self.environment = previous_environment;
     }
 
     fn visit_expression(&mut self, expression: &Expression) -> () {
@@ -95,5 +105,9 @@ impl statement::Visitor<()> for Interpreter {
     fn visit_variable_declaration(&mut self, name: &String, value: &Expression) -> () {
         let value = value.accept(self);
         self.environment.define(name.clone(), value);
+    }
+
+    fn visit_print(&mut self, expression: &Expression) -> () {
+        println!("{}", expression.accept(self));
     }
 }
