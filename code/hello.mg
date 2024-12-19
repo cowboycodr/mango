@@ -1,10 +1,5 @@
-var a = 2;
-var b = 5;
-
-print a ** 2;
-print "";
+var a = 5;
 
 {
-    var b = 3;
-    print b!;
+    print a! ** 2;
 }
