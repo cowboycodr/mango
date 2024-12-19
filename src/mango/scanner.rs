@@ -99,13 +99,11 @@ impl Scanner {
             }
 
             '"' => {
-                self.source.next();
-
                 while self.source.peek(0) != '"' && !self.source.is_at_end() {
                     self.source.next();
                 }
 
-                if self.source.is_at_end() {
+                if self.source.is_at_end() && self.source.peek(0) != '"' {
                     panic!("Unterminated string..");
                 }
 
