@@ -1,5 +1,5 @@
 use super::expression::{Expression, Visitor};
-use super::literal::{Literal, Fac, Pow};
+use super::literal::{Fac, Literal, Pow};
 use super::token_type::TokenType;
 
 pub struct Interpreter;
@@ -15,7 +15,12 @@ impl Interpreter {
 }
 
 impl Visitor<Literal> for Interpreter {
-    fn visit_binary(&mut self, left: &Expression, operator: &super::token::Token, right: &Expression) -> Literal {
+    fn visit_binary(
+        &mut self,
+        left: &Expression,
+        operator: &super::token::Token,
+        right: &Expression,
+    ) -> Literal {
         let left = left.accept(self);
         let right = right.accept(self);
 
@@ -26,11 +31,16 @@ impl Visitor<Literal> for Interpreter {
             TokenType::Plus => left + right,
             TokenType::Minus => left - right,
 
-            _ => panic!("Unsupported binary operator")
+            _ => panic!("Unsupported binary operator"),
         }
     }
-    
-    fn visit_unary(&mut self, operator: &super::token::Token, right: &Expression, is_prefix: &bool) -> Literal {
+
+    fn visit_unary(
+        &mut self,
+        operator: &super::token::Token,
+        right: &Expression,
+        is_prefix: &bool,
+    ) -> Literal {
         let right = right.accept(self);
 
         match (operator.kind, is_prefix) {
