@@ -1,33 +1,50 @@
+// mod mango;
+
+// use std::io::{self, Write};
+
+// use mango::parser::Parser;
+// use mango::scanner::Scanner;
+
+// fn main() {
+//     loop {
+//         let mut input = String::new();
+
+//         print!("> ");
+//         io::stdout().flush().expect("Failed to flush stdout"); // Flush to ensure prompt is shown
+
+//         io::stdin()
+//             .read_line(&mut input)
+//             .expect("Failed to read input");
+
+//         let trimmed = input.trim();
+
+//         if trimmed.eq_ignore_ascii_case("exit") {
+//             break;
+//         }
+
+//         let mut scanner = Scanner::new(input.clone());
+//         let tokens = scanner.scan();
+
+//         let mut parser = Parser::new(tokens);
+//         let expression = parser.parse();
+
+//         println!("{}", expression.evaluate());
+//     }
+// }
+
 mod mango;
 
-use std::io::{self, Write};
-
-use mango::parser::Parser;
+use mango::interpreter::Interpreter;
 use mango::scanner::Scanner;
+use mango::parser::Parser;
 
 fn main() {
-    loop {
-        let mut input = String::new();
+    let code = "2 ** 2";
 
-        print!("> ");
-        io::stdout().flush().expect("Failed to flush stdout"); // Flush to ensure prompt is shown
+    let mut interpreter = Interpreter::new();
 
-        io::stdin()
-            .read_line(&mut input)
-            .expect("Failed to read input");
+    let tokens = Scanner::new(code.to_string()).scan();
+    let expression = Parser::new(tokens).parse();
 
-        let trimmed = input.trim();
-
-        if trimmed.eq_ignore_ascii_case("exit") {
-            break;
-        }
-
-        let mut scanner = Scanner::new(input.clone());
-        let tokens = scanner.scan();
-
-        let mut parser = Parser::new(tokens);
-        let expression = parser.parse();
-
-        println!("{}", expression.evaluate());
-    }
+    println!("{}", interpreter.interpret(expression));
 }
