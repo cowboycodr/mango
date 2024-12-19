@@ -69,7 +69,11 @@ impl expression::Visitor<Literal> for Interpreter {
     }
 
     fn visit_variable(&mut self, name: &String) -> Literal {
-        self.environment.access(name).clone()
+        if let Some(variable) = self.environment.access(name).clone() {
+            return variable.clone();
+        }
+
+        Literal::None
     }
 }
 
