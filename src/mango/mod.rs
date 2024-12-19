@@ -1,10 +1,10 @@
 pub mod expression;
 pub mod statement;
 
+pub mod environment;
 pub mod interpreter;
 pub mod parser;
 pub mod scanner;
-pub mod environment;
 
 pub mod literal;
 pub mod token;

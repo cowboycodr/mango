@@ -32,7 +32,7 @@ impl From<String> for TokenType {
             "false" => TokenType::False,
 
             "print" => TokenType::Print,
-            
+
             _ => TokenType::Identifier,
         }
     }
