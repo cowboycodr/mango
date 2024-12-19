@@ -1,13 +1,13 @@
-use std::time::{self, Instant, Duration};
+use std::time::{Duration, Instant};
 
 pub struct Timer {
-    start: Instant
+    start: Instant,
 }
 
 impl Timer {
     pub fn start() -> Self {
         Self {
-            start: Instant::now()
+            start: Instant::now(),
         }
     }
 
