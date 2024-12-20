@@ -2,14 +2,28 @@ use super::expression::Expression;
 
 #[derive(Debug)]
 pub enum Statement {
-    Program { statements: Vec<Statement> },
-    Block { statements: Vec<Statement> },
+    Program {
+        statements: Vec<Statement>,
+    },
+    Block {
+        statements: Vec<Statement>,
+    },
 
-    Expression { expression: Expression },
-    VariableDeclaration { name: String, value: Expression },
-    While { condition: Expression, block: Box<Statement> },
-    
-    Print { expression: Expression },
+    Expression {
+        expression: Expression,
+    },
+    VariableDeclaration {
+        name: String,
+        value: Expression,
+    },
+    While {
+        condition: Expression,
+        block: Box<Statement>,
+    },
+
+    Print {
+        expression: Expression,
+    },
 }
 
 impl Statement {
@@ -21,8 +35,8 @@ impl Statement {
             Statement::Expression { expression } => visitor.visit_expression(expression),
             Statement::VariableDeclaration { name, value } => {
                 visitor.visit_variable_declaration(name, value)
-            },
-            Statement::While { condition, block  } => visitor.visit_while(condition, block),
+            }
+            Statement::While { condition, block } => visitor.visit_while(condition, block),
 
             Statement::Print { expression } => visitor.visit_print(expression),
         }

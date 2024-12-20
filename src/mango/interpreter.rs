@@ -60,20 +60,25 @@ impl expression::Visitor<Literal> for Interpreter {
         }
     }
 
-    fn visit_literal(&mut self, literal: &Literal) -> Literal {
-        literal.clone()
-    }
-
-    fn visit_grouping(&mut self, expression: &Expression) -> Literal {
-        expression.accept(self)
-    }
-
     fn visit_variable(&mut self, name: &String) -> Literal {
         if let Some(variable) = self.environment.access(name).clone() {
             return variable.clone();
         }
 
         Literal::None
+    }
+
+    fn visit_literal(&mut self, literal: &Literal) -> Literal {
+        literal.clone()
+    }
+
+    fn visit_assignment(&mut self, name: &String, value: &Box<Expression>) -> Literal {
+        let value = value.accept(self);
+        return self.environment.assign(name, value);
+    }
+
+    fn visit_grouping(&mut self, expression: &Expression) -> Literal {
+        expression.accept(self)
     }
 }
 
@@ -110,7 +115,9 @@ impl statement::Visitor<()> for Interpreter {
     fn visit_while(&mut self, condition: &Expression, block: &Box<Statement>) -> () {
         loop {
             if let Literal::Boolean(value) = condition.accept(self) {
-                if !value { break }
+                if !value {
+                    break;
+                }
             }
 
             block.accept(self);

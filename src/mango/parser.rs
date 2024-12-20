@@ -38,7 +38,10 @@ impl Parser {
             let condition = self.expression();
             let block = self.block();
 
-            return Statement::While { condition, block: Box::new(block) };
+            return Statement::While {
+                condition,
+                block: Box::new(block),
+            };
         }
 
         self.block()
@@ -121,7 +124,26 @@ impl Parser {
     }
 
     fn expression(&mut self) -> Expression {
-        self.term()
+        self.assignment()
+    }
+
+    fn assignment(&mut self) -> Expression {
+        let mut expression = self.term();
+
+        if self.expect(&[TokenType::Equal]) {
+            let right = self.assignment();
+
+            if let Expression::Variable(name) = expression {
+                expression = Expression::Assignment {
+                    name,
+                    value: Box::new(right),
+                };
+            } else {
+                panic!("ASsignment type must be an identifier.")
+            }
+        }
+
+        expression
     }
 
     fn term(&mut self) -> Expression {

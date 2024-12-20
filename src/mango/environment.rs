@@ -36,4 +36,15 @@ impl Environment {
 
         None
     }
+
+    pub fn assign(&mut self, name: &String, value: Literal) -> Literal {
+        if self.values.contains_key(name) {
+            self.values.insert(name.clone(), value.clone());
+            value
+        } else if let Some(ref mut enclosing) = self.enclosing {
+            enclosing.assign(name, value)
+        } else {
+            panic!("Undefined variable '{}'.", name);
+        }
+    }
 }
