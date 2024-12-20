@@ -38,6 +38,12 @@ impl expression::Visitor<Literal> for Interpreter {
             TokenType::Plus => left + right,
             TokenType::Minus => left - right,
 
+            TokenType::Less => Literal::Boolean(left < right),
+            TokenType::LessEqual => Literal::Boolean(left <= right),
+            TokenType::Greater => Literal::Boolean(left > right),
+            TokenType::GreaterEqual => Literal::Boolean(left >= right),
+            TokenType::EqualEqual => Literal::Boolean(left == right),
+
             _ => panic!("Unsupported binary operator"),
         }
     }
@@ -91,7 +97,7 @@ impl statement::Visitor<()> for Interpreter {
 
     fn visit_block(&mut self, statements: &Vec<Statement>) -> () {
         let cloned_environment = self.environment.clone();
-        let previous_environment = std::mem::replace(
+        let _ = std::mem::replace(
             &mut self.environment,
             Environment::from_enclosing(cloned_environment),
         );
@@ -100,7 +106,11 @@ impl statement::Visitor<()> for Interpreter {
             statement.accept(self);
         }
 
-        self.environment = previous_environment;
+        self.environment = *self
+            .environment
+            .enclosing
+            .take()
+            .expect("Enclosing environment not found");
     }
 
     fn visit_expression(&mut self, expression: &Expression) -> () {

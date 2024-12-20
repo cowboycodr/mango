@@ -30,20 +30,6 @@ impl Parser {
     }
 
     fn statement(&mut self) -> Statement {
-        self.while_statement()
-    }
-
-    fn while_statement(&mut self) -> Statement {
-        if self.expect(&[TokenType::While]) {
-            let condition = self.expression();
-            let block = self.block();
-
-            return Statement::While {
-                condition,
-                block: Box::new(block),
-            };
-        }
-
         self.block()
     }
 
@@ -58,6 +44,20 @@ impl Parser {
             self.advance();
 
             return Statement::Block { statements };
+        }
+
+        self.while_statement()
+    }
+
+    fn while_statement(&mut self) -> Statement {
+        if self.expect(&[TokenType::While]) {
+            let condition = self.expression();
+            let block = self.block();
+
+            return Statement::While {
+                condition,
+                block: Box::new(block),
+            };
         }
 
         self.print()
@@ -128,7 +128,7 @@ impl Parser {
     }
 
     fn assignment(&mut self) -> Expression {
-        let mut expression = self.term();
+        let mut expression = self.equality();
 
         if self.expect(&[TokenType::Equal]) {
             let right = self.assignment();
@@ -139,7 +139,30 @@ impl Parser {
                     value: Box::new(right),
                 };
             } else {
-                panic!("ASsignment type must be an identifier.")
+                panic!("Assignment type must be an identifier.")
+            }
+        }
+
+        expression
+    }
+
+    fn equality(&mut self) -> Expression {
+        let mut expression = self.term();
+
+        if self.expect(&[
+            TokenType::EqualEqual,
+            TokenType::Greater,
+            TokenType::GreaterEqual,
+            TokenType::Less,
+            TokenType::LessEqual,
+        ]) {
+            let operator = self.previous();
+            let right = self.term();
+
+            expression = Expression::Binary {
+                left: Box::new(expression),
+                operator,
+                right: Box::new(right),
             }
         }
 

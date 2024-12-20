@@ -1,7 +1,7 @@
 use std::fmt::{self, Display, Formatter};
 use std::ops::{Add, Div, Mul, Neg, Not, Sub};
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq, PartialOrd)]
 pub enum Literal {
     Number(f64),
     Boolean(bool),

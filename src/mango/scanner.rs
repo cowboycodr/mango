@@ -24,6 +24,10 @@ impl Source {
         char
     }
 
+    pub fn check(&self, c: char) -> bool {
+        return self.peek(0) == c;
+    }
+
     pub fn peek(&self, offset: usize) -> char {
         if self.position + offset >= self.input.len() {
             return '\0';
@@ -87,10 +91,40 @@ impl Scanner {
             '-' => Some(Token::new(TokenType::Minus, None)),
             '/' => Some(Token::new(TokenType::Slash, None)),
 
-            '=' => Some(Token::new(TokenType::Equal, None)),
-            '!' => Some(Token::new(TokenType::Bang, None)),
+            '=' => {
+                if self.source.check('=') {
+                    self.source.next();
+                    Some(Token::new(TokenType::EqualEqual, None))
+                } else {
+                    Some(Token::new(TokenType::Equal, None))
+                }
+            }
+            '!' => {
+                if self.source.check('=') {
+                    self.source.next();
+                    Some(Token::new(TokenType::BangEqual, None))
+                } else {
+                    Some(Token::new(TokenType::Bang, None))
+                }
+            }
+            '<' => {
+                if self.source.check('=') {
+                    self.source.next();
+                    Some(Token::new(TokenType::LessEqual, None))
+                } else {
+                    Some(Token::new(TokenType::Less, None))
+                }
+            }
+            '>' => {
+                if self.source.check('=') {
+                    self.source.next();
+                    Some(Token::new(TokenType::GreaterEqual, None))
+                } else {
+                    Some(Token::new(TokenType::Greater, None))
+                }
+            }
             '*' => {
-                if self.source.peek(0) == '*' {
+                if self.source.check('*') {
                     self.source.next();
                     Some(Token::new(TokenType::StarStar, None))
                 } else {
@@ -99,7 +133,7 @@ impl Scanner {
             }
 
             '"' => {
-                while self.source.peek(0) != '"' && !self.source.is_at_end() {
+                while !self.source.check('"') && !self.source.is_at_end() {
                     self.source.next();
                 }
 
@@ -120,7 +154,7 @@ impl Scanner {
                     self.source.next();
                 }
 
-                if self.source.peek(0) == '.' && self.source.peek(1).is_ascii_digit() {
+                if self.source.check('.') && self.source.peek(1).is_ascii_digit() {
                     self.source.next();
 
                     while self.source.peek(0).is_ascii_digit() {

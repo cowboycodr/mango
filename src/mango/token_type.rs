@@ -12,7 +12,13 @@ pub enum TokenType {
     Slash,
 
     Equal,
+    EqualEqual,
     Bang,
+    BangEqual,
+    Less,
+    LessEqual,
+    Greater,
+    GreaterEqual,
     Star,
     StarStar,
 
