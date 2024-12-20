@@ -1,4 +1,6 @@
 var count = 0;
-count = count + 1;
 
-print count;
+while count < 10 {
+    print count;
+    count = count + 1;
+}
